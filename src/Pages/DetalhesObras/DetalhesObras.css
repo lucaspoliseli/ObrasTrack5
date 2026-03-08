@@ -1,0 +1,446 @@
+.container {
+  padding: 24px 28px;
+  background: linear-gradient(135deg, #f0f8ff 0%, #f5fafc 100%);
+  color: #333;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+/* Wrapper principal - layout em coluna única */
+.detalhes-obra-content {
+  max-width: 1400px;
+  margin: 24px auto 0;
+}
+
+/* Área de gráficos centralizada */
+.detalhes-obra-graficos {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+h1 {
+  color: #005f73;
+}
+
+p {
+  margin: 5px 0;
+}
+
+.link-voltar {
+  display: inline-block;
+  margin-top: 20px;
+  color: #0a9396;
+  text-decoration: none;
+}
+.link-voltar:hover {
+  text-decoration: underline;
+}
+
+.etapas-container {
+  margin-top: 40px;
+}
+
+/* ================== Tabela de etapas ================== */
+.tabela-etapas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.tabela-etapas th, .tabela-etapas td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+.tabela-etapas th {
+  background-color: #f5f5f5;
+}
+
+.etapas-container {
+  margin-top: 32px;
+}
+
+.etapas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.etapas-contagem {
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.tabela-etapas {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.tabela-etapas th,
+.tabela-etapas td {
+  border: 1px solid #e6e6e6;
+  padding: 10px 12px;
+  text-align: center;
+}
+
+.tabela-etapas th {
+  background: #f7f9fb;
+  font-weight: 600;
+}
+
+.badge-status {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  line-height: 1;
+  background: #eee;
+}
+
+.badge-status.ok { background: #e6f6ec; color: #147d3f; }       /* Concluída */
+.badge-status.run { background: #e9f2ff; color: #1e5bb8; }      /* Em andamento */
+.badge-status.wait { background: #fff5e6; color: #a66300; }     /* Aguardando */
+.badge-status.pend { background: #f4f4f4; color: #555; }        /* Pendente */
+
+.etapas-vazio {
+  margin-top: 8px;
+  color: #777;
+}
+
+/* ================== Endereço (ObraInfo) ================== */
+/* Garante que o endereço fique visível e com aparência de link */
+.obra-info .endereco {
+  color: #111;
+}
+
+.obra-info .endereco a {
+  color: #0b6efd;              /* cor do link */
+  text-decoration: underline;  /* indica clicável */
+  font-weight: 500;
+}
+
+.obra-info .endereco a:visited {
+  color: #6f42c1;              /* opcional */
+}
+
+.obra-info .endereco a:hover {
+  text-decoration: none;       /* efeito hover */
+}
+
+.obra-info { 
+  margin-bottom: 24px; 
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid #e8e8e8;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.obra-info h2 { 
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid #e8e8e8;
+}
+.obra-info p { margin: 8px 0; }
+
+/* Se houver algum reset agressivo em outro lugar, pode usar:
+.container .obra-info .endereco a { color: #0b6efd !important; }
+*/
+
+
+/* ===== BOTÕES DE AÇÃO (Editar obra / Adicionar etapas) ===== */
+
+.btn {
+  background: #31B090;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  padding: 0.5rem 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1.2;
+}
+
+.btn:hover {
+  filter: brightness(0.95);
+}
+
+/* ===== BLOCO GERAL DAS ETAPAS ===== */
+
+.etapas-obra-wrapper {
+  margin-top: 32px;
+  background: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e4e4e4;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.etapas-obra-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: .5rem;
+  margin-bottom: 1rem;
+}
+
+.etapas-obra-titulo {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #202632;
+}
+
+.etapas-obra-contagem {
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.etapas-obra-vazio {
+  color: #666;
+  font-size: 0.9rem;
+  font-style: italic;
+  margin: 0;
+}
+
+/* ===== LISTA DE ETAPAS ===== */
+
+.etapas-obra-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.etapas-obra-card {
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  padding: 1rem 1rem;
+  background: #fafafa;
+  margin-bottom: 1rem;
+}
+
+/* topo do card: nome da etapa, status, datas, botão ver detalhes */
+
+.etapas-obra-topo {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .75rem;
+}
+
+.etapas-obra-info {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+}
+
+.etapas-obra-nome {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #202632;
+  max-width: 240px;
+  word-break: break-word;
+}
+
+.etapas-obra-status {
+  font-size: 0.8rem;
+}
+
+/* badge de status */
+.badge-status {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: .4rem .5rem;
+  border-radius: 6px;
+  background-color: #ddd;
+  color: #222;
+  text-transform: none;
+  white-space: nowrap;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+/* cores diferentes por status */
+.badge-concluída {
+  background-color: #c6f6d5;
+  color: #1b5e20;
+}
+.badge-em-andamento {
+  background-color: #d9ecff;
+  color: #0b3a75;
+}
+.badge-aguardando-material {
+  background-color: #fff7cc;
+  color: #7a6200;
+}
+.badge-atrasada {
+  background-color: #ffd6d6;
+  color: #7a0000;
+}
+.badge-pausada {
+  background-color: #ececec;
+  color: #444;
+}
+.badge-pendente {
+  background-color: #ececec;
+  color: #444;
+}
+
+.etapas-obra-extra {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .5rem;
+  font-size: 0.8rem;
+  color: #444;
+  text-align: right;
+}
+
+.etapas-obra-datas {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+  font-size: 0.8rem;
+}
+
+.etapas-obra-prazo {
+  font-size: 0.75rem;
+  color: #666;
+}
+
+.btn-toggle-sub {
+  background: #31B090;
+  color: #fff;
+  border: 0;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  padding: .5rem .75rem;
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1.2;
+}
+.btn-toggle-sub:hover {
+  filter: brightness(0.95);
+}
+
+/* ===== DETALHES DA ETAPA QUANDO CLICA "VER DETALHES" ===== */
+
+.etapas-obra-detalhes {
+  margin-top: 1rem;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.etapas-obra-desc {
+  margin: 0 0 1rem 0;
+  white-space: pre-wrap;
+  line-height: 1.4;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+/* coisinhas tipo responsável, início, fim */
+.etapas-obra-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  row-gap: .5rem;
+  font-size: 0.8rem;
+  color: #444;
+  margin-bottom: 1rem;
+}
+
+/* ===== SUBETAPAS VISUAL ===== */
+
+.subetapas-view-bloco {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: .75rem .75rem 0.5rem .75rem;
+}
+
+.subetapas-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+}
+
+.subetapas-view-header h4 {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #202632;
+}
+
+.subetapas-view-vazio {
+  font-size: 0.8rem;
+  color: #666;
+  font-style: italic;
+  margin: 0 0 .75rem 0;
+}
+
+.subetapas-view-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.subetapas-view-item {
+  border-top: 1px solid #e2e2e2;
+  padding: .5rem 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.subetapas-view-linha {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: .5rem;
+  align-items: baseline;
+}
+
+.subetapas-view-nome {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #222;
+  max-width: 70%;
+  word-break: break-word;
+}
+
+.subetapas-view-status {
+  font-size: 0.75rem;
+}
+
+.chat-obra { margin: 2rem auto 0 auto; max-width: 540px; border: 1.5px solid #31B090; border-top: 5px solid #31B090; background: #fafbfc; border-radius: 10px; padding: 1.3rem 1.2rem 1.1rem 1.2rem; box-shadow: 0 3px 16px rgba(60,60,60,0.055); position: relative; }
+.chat-obra-explain { color: #277859; font-size: 0.97em; margin-bottom: 0.8rem; margin-top: -0.8rem; text-align: left; }
+.chat-mensagens { min-height: 58px; max-height: 220px; overflow-y: auto; margin-bottom: 1.1rem; background: #fff; border-radius: 7px; border: 1px solid #ececec; padding: 0.6rem 1rem; }
+.mensagem-vazia { color: #888; font-size: 0.94rem; text-align: left; }
+.mensagem-own { background: #e6fdee; color: #188443; border-radius: 8px; padding: 5px 10px; margin: 7px 0 7px auto; text-align: right; max-width: 85%; }
+.mensagem-other { background: #f0f4f8; color: #173960; border-radius: 8px; padding: 5px 10px; margin: 7px auto 7px 0; text-align: left; max-width: 85%; }
+.chat-form { display: flex; gap: 0.5rem; margin-top: 0.2rem; }
+.chat-form input[type="text"] { flex: 1; border: 1px solid #cdd6e1; border-radius: 6px; padding: 7px 10px; font-size: 1rem; }
+.chat-form button { background: #31B090; color: #fff; padding: 8px 19px; border: none; border-radius: 5px; font-size: 1rem; font-weight: 600; cursor: pointer; }
+.chat-form button:hover { filter: brightness(0.92); }

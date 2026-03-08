@@ -1,0 +1,103 @@
+/* ---- EditarObra ---- */
+.editar-obra {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.editar-obra .page-title {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.editar-obra .card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+  padding: 18px;
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (min-width: 900px) {
+  .editar-obra .card { padding: 24px 28px; }
+}
+
+/* grade responsiva: 1 col → 2 col */
+.editar-obra .form-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .editar-obra .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* linha full */
+.editar-obra .form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.editar-obra .form-row.full {
+  grid-column: 1 / -1;
+}
+
+.editar-obra label {
+  font-size: 13px;
+  color: #344054;
+  font-weight: 600;
+}
+
+.editar-obra input,
+.editar-obra select,
+.editar-obra textarea {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px 12px;
+  outline: none;
+  width: 100%;
+  background: #fafafa;
+}
+.editar-obra input:focus,
+.editar-obra select:focus,
+.editar-obra textarea:focus {
+  border-color: #00a98f; /* verde do tema */
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(0,169,143,0.12);
+}
+
+.editar-obra .actions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.editar-obra .btn {
+  border: 0;
+  padding: 10px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.editar-obra .btn-primary { background: #00a98f; color: #fff; }
+.editar-obra .btn-primary:hover { filter: brightness(0.95); }
+.editar-obra .btn-secondary { background: #eef2f7; color: #344054; }
+.editar-obra .btn-secondary:hover { filter: brightness(0.97); }
+
+/* rodapé colado embaixo quando pouco conteúdo */
+.editar-obra .page-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  width: 100%;
+  max-width: 1000px;
+}

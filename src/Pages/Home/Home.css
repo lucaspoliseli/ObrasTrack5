@@ -1,0 +1,36 @@
+.home-container {
+  padding: 6rem 1rem;
+  max-width: 900px;
+  text-align: center;
+  height: 70vh;
+  margin: 0 auto; /* centraliza horizontalmente */
+}
+
+/* título principal */
+.home-container h1 {
+  color: #202632;
+  margin-bottom: 2rem;
+}
+
+/* parágrafo */
+.home-container p {
+  font-size: 1.2rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* 🧱 novo: emoji animado */
+.emoji-engenheiro {
+  font-size: 4rem;
+  display: inline-block;
+  animation: wave 2.5s infinite ease-in-out;
+  cursor: default;
+  margin-bottom: 1rem;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.15);
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+}

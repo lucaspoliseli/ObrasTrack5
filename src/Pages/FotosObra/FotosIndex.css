@@ -1,0 +1,112 @@
+.fotos-index {
+  margin: 52px auto 0 auto; /* mais espaço do topo */
+  padding: 0 0 60px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fotos-page-bg {
+  width: 100vw;
+  min-height: 100vh;
+  background: linear-gradient(120deg, #e8f2f8 0%, #f7fcfe 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.fotos-table {
+  display: grid;
+  grid-template-columns: 1.4fr 0.7fr 1.1fr;
+  gap: 0px 0px;
+  width: 610px;
+  max-width: 98vw;
+  margin: 48px auto 0 auto;
+  background: #fff;
+  border-radius: 24px;
+  box-shadow: 0 8px 40px 0 rgba(24,92,140,0.10);
+  padding: 32px 40px 44px 40px;
+  border: 1px solid #f2f8fa;
+}
+.fh-col {
+  font-weight: bold;
+  font-size: 1.14em;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  color: #166282;
+  background: #e6f3fb;
+  padding: 16px 0 14px 0;
+  border-radius: 14px 14px 0 0;
+  margin: 0;
+  box-shadow: 0 3px 8px 0 rgba(60,130,210,0.04);
+  border-bottom: 2px solid #c2d6e6;
+  letter-spacing: 2px;
+  height: 58px;
+}
+.fh-col:first-child {
+  text-align: center;
+  padding-left: 0;
+}
+
+/* Linhas da tabela */
+.fc-obra, .fc-num, .fc-acoes {
+  min-height: 57px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.08em;
+  box-shadow: none;
+  background: #fff;
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+  border-bottom: 1px solid #eef1f4;
+}
+.fc-obra { font-weight: 500;}
+.fc-obra, .fc-num, .fc-acoes { text-align: center;}
+
+.fotos-table > .fc-obra:last-of-type,
+.fotos-table > .fc-num:last-of-type,
+.fotos-table > .fc-acoes:last-of-type {
+  border-bottom: none;
+}
+
+.fc-obra:hover, .fc-num:hover, .fc-acoes:hover {
+  background: #f7fdff;
+}
+
+.botao-retangular {
+  background: #23b094;
+  color: white;
+  border-radius: 8px;
+  padding: 0.55rem 1.3rem;
+  font-size: 1.04rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.18s, transform 0.12s;
+  font-weight: 500;
+  box-shadow: 0 1px 5px 0 rgba(16,110,84,0.085);
+  text-decoration: none;
+}
+.botao-retangular:hover {
+  background: #158870;
+  transform: translateY(-2px) scale(1.035);
+}
+
+@media (max-width: 750px) {
+  .fotos-table {
+    width: 99vw !important;
+    padding: 12px 0.5vw 18px 0.5vw;
+    grid-template-columns: 1fr 0.5fr 0.95fr;
+  }
+  .fh-col {
+    font-size: 1.025em;
+    padding-top: 11px;
+    padding-bottom: 10px;
+    height: 42px;
+  }
+  .fotos-page-bg { padding-bottom: 50px; }
+}

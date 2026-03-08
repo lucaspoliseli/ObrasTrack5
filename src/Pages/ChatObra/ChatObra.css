@@ -1,0 +1,161 @@
+.chat-obra-page {
+  max-width: 100%;
+  margin: 20px 40px;
+  padding: 24px 32px;
+  background: linear-gradient(135deg, #f0f8ff 0%, #f5fafc 100%);
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-obra-header {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  border: 1px solid #e8e8e8;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.chat-obra-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+  color: #263f52;
+}
+
+.chat-obra-explain {
+  color: #277859;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.link-voltar-chat {
+  color: #0a9396;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border: 1px solid #0a9396;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.link-voltar-chat:hover {
+  background: #0a9396;
+  color: #fff;
+}
+
+.chat-mensagens {
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 40px;
+  margin-bottom: 24px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
+  min-height: 550px;
+  max-height: 75vh;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.mensagem-vazia {
+  color: #888;
+  font-size: 1rem;
+  text-align: center;
+  padding: 40px;
+}
+
+.mensagem-own {
+  background: linear-gradient(135deg, #d4f4dd 0%, #c0f0d0 100%);
+  color: #145f2f;
+  border-radius: 16px;
+  padding: 14px 22px;
+  margin: 12px 0 12px auto;
+  text-align: right;
+  max-width: 65%;
+  width: fit-content;
+  word-wrap: break-word;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #b8ecc7;
+}
+
+.mensagem-other {
+  background: linear-gradient(135deg, #e3ecf8 0%, #d0e0f0 100%);
+  color: #0e2d50;
+  border-radius: 16px;
+  padding: 14px 22px;
+  margin: 12px auto 12px 0;
+  text-align: left;
+  max-width: 65%;
+  width: fit-content;
+  word-wrap: break-word;
+  font-size: 1.08rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #b8ccde;
+}
+
+.chat-form {
+  display: flex;
+  gap: 16px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow: 0 6px 30px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
+  width: 100%;
+}
+
+.chat-form input[type="text"] {
+  flex: 1;
+  border: 2px solid #cdd6e1;
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-size: 1.05rem;
+  transition: all 0.2s;
+}
+
+.chat-form input[type="text"]:focus {
+  outline: none;
+  border-color: #31B090;
+  box-shadow: 0 0 0 3px rgba(49, 176, 144, 0.1);
+}
+
+.chat-form button {
+  background: linear-gradient(135deg, #31B090 0%, #158870 100%);
+  color: #fff;
+  padding: 14px 40px;
+  border: none;
+  border-radius: 14px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 3px 12px rgba(49, 176, 144, 0.3);
+}
+
+.chat-form button:hover {
+  background: linear-gradient(135deg, #158870 0%, #0e6b50 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 18px rgba(49, 176, 144, 0.4);
+}
+
+@media (max-width: 768px) {
+  .chat-obra-page {
+    padding: 16px;
+  }
+  
+  .chat-obra-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .mensagem-own, .mensagem-other {
+    max-width: 85%;
+  }
+}
+

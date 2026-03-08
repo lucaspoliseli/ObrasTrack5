@@ -1,0 +1,222 @@
+#obras-section {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 120px; /* espaço para o footer */
+  min-height: 100vh; /* garante que ocupe toda a tela */
+}
+
+#lista-obras {
+  list-style: none;
+  text-overflow: ellipsis;
+  padding: 0;
+  margin: 0;
+}
+
+.cabecalho-tabela,
+.item-lista {
+  display: flex;
+  background-color: #ffffff;
+  width: 92%;
+  margin: 10px auto;
+  padding: 24px 0 19px 0;
+  align-items: center;
+  border-bottom: 1.5px solid #eee;
+  border-radius: 16px;
+  box-shadow: 0 2.5px 18px 0 rgba(30,40,90,0.06);
+}
+
+.cabecalho-tabela {
+  background-color: #f7fafd;
+  text-transform: uppercase;
+  color: #132330;
+  font-weight: bold;
+  padding: 24px 0 18px 0;
+  border-bottom: 2.5px solid #e8eae8;
+  font-size: 1.18rem;
+  border-radius: 20px;
+}
+
+.col {
+  padding: 4px 16px;
+  flex: 1 1 0;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  font-size: 1.07rem;
+  box-sizing: border-box;
+}
+
+.col-nome {
+  flex: 2.5;
+}
+.col-responsavel {
+  flex: 2;
+}
+.col-prazo, .col-final, .col-status {
+  flex: 1.4;
+}
+
+
+#filtro-obras {
+  background-color: #ffffff;
+  width: 100%;
+  color: #1c030c;
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+#filtro-obras nav {
+  width: 90%;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.buttons-filtro {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+}
+
+.buttons-filtro button {
+  padding: 8px 16px;
+  background: transparent;
+  border: none;
+  color: #1c030c;
+  cursor: pointer;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  transition: color 0.2s;
+}
+
+.buttons-filtro button:hover {
+  color: #007f5f;
+}
+
+.buttons-filtro button.active {
+  color: #007f5f;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.tag-status {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  border-radius: 20px;
+  padding: 9px 16px;
+  font-weight: 600;
+  font-size: 1.01rem;
+  min-width: 110px;
+  max-width: calc(100% - 32px); /* deixa espaço nas laterais para não colar */
+  /* ajuste automático para largura, não colando nos cantos nem muito largo */
+  margin: 0 auto;
+  box-shadow: none;
+  gap: 8px; /* Espaço entre bolinha e texto */
+  box-sizing: border-box;
+}
+
+.tag-status::before {
+  content: '';
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.tag-status p {
+  margin: 0;
+  padding: 0;
+}
+
+.em-andamento {
+  background-color: #f1f1f1;
+}
+
+.em-andamento::before {
+  background-color: #1e5bb8;
+}
+
+.finalizada {
+  background-color: #31B090; 
+  color: white;
+}
+
+.finalizada::before {
+  background-color: #ffffff;
+}
+
+.atrasada {
+  background-color: #d9534f; 
+  color: white;
+}
+
+.atrasada::before {
+  background-color: #ffffff;
+}
+
+.item-lista a {
+  color: #000;
+  text-decoration: none;
+}
+
+.item-lista a:hover {
+  text-decoration: underline;
+  color: #005f73;
+}
+
+#filtro-obras nav .botao-retangular {
+  background: #1967a2;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 1.07rem;
+  padding: 12px 31px;
+  border-radius: 15px;
+  box-shadow: none;
+  border: none;
+  transition: background 0.18s, transform 0.16s;
+  outline: none;
+  display: inline-block;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+#filtro-obras nav .botao-retangular:hover {
+  background: #164576;
+  transform: translateY(-1px) scale(1.032);
+  color: #fff;
+}
+
+.col-status { 
+  justify-content: center; 
+  padding: 8px 16px; /* padding igual às outras colunas para alinhamento */
+}
+
+@media (max-width: 900px) {
+  .cabecalho-tabela, .item-lista {
+    font-size: 0.97rem;
+    width: 99vw;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+  .col {
+    font-size: 0.97rem;
+    padding: 2px 8px;
+  }
+  #filtro-obras nav .botao-retangular {
+    padding: 7px 7vw;
+    font-size: 0.93rem;
+  }
+  .tag-status { 
+    font-size: 0.95rem; 
+    min-width: 60px; 
+    padding: 6px 12px; 
+    max-width: 95%; /* evita colar nas bordas em mobile */
+  }
+  .col-status { padding: 6px 8px; }
+}
+
+

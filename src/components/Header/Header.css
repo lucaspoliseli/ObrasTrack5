@@ -1,0 +1,48 @@
+header {
+  background-color: #202632;
+  color: white;
+  display: flex;
+  min-height: 12vh;
+  align-items: center;
+}
+
+/* seção que contém logo+menu, centralizada */
+#header {
+  width: 100%;
+  display: flex;
+  justify-content: center; /* centraliza o conjunto no header */
+}
+
+.logo-menu {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+#logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #00bcd4;
+  margin: 0;
+}
+
+#menu {
+  margin-right: 20px;
+}
+
+#menu a {
+  margin: 0 10px;
+  color: white;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.3s;
+}
+
+#menu a:hover {
+  color: #00bcd4;
+}
+/* esconde os links que ficam do lado do logo */
+.header-nav {
+  display: none !important;
+}
+

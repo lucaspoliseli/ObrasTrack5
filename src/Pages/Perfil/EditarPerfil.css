@@ -1,0 +1,22 @@
+/* EditarPerfil.css — versão escopada */
+.container-editar-perfil {
+  padding: 20px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.container-editar-perfil h2 {
+  margin-bottom: 20px;
+}
+
+.botoes-editar-perfil {
+  display: flex;
+}
+
+.container-editar-perfil button {
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  margin-right: 10px;
+  margin-top: 15px;
+}
