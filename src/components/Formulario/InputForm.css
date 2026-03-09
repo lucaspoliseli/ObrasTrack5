@@ -1,13 +1,5 @@
-/* .input-form{
-    display: flex;
-    flex-direction: column;
-    margin: 5px;
-    
-    /* background-color: blue;
-    width: 400px; */
-   */
-  
- .form-label {
+/* .input-form antigo - referência */
+.form-label {
     display: flex;
     flex-direction: column;
     width: 100%;
