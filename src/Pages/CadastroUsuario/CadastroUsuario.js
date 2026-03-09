@@ -14,6 +14,9 @@ export default function CadastroUsuario() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [funcao, setFuncao] = useState("engenheiro"); // 'engenheiro' | 'proprietario'
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [erroTela, setErroTela] = useState("");
   
   // Validação de senha
   const [senhaErro, setSenhaErro] = useState("");
@@ -46,54 +49,57 @@ export default function CadastroUsuario() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    
-    // Validar senha antes de enviar
+    setErroTela("");
+
     const erroSenha = validarSenha(senha);
     if (erroSenha) {
       setSenhaTocou(true);
       setSenhaErro(erroSenha);
+      setErroTela("Preencha todos os campos obrigatórios corretamente.");
       return;
     }
-    
+
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+
+    const payload = { nome, sobrenome, email, senha: "[REDACTED]", funcao };
+    console.log("[Cadastro] Submit disparado. Payload (senha mascarada):", payload);
+
     try {
-      // Limpar dados antigos do localStorage que podem causar conflito
       localStorage.removeItem("auth_user");
       localStorage.removeItem("usuarioLogado");
       localStorage.removeItem("currentUser");
-      
+
       await signUp({ nome, sobrenome, email, senha, funcao });
+      console.log("[Cadastro] Resposta OK. Redirecionando.");
       if (!USE_API) {
-        await new Promise(resolve => setTimeout(resolve, 800));
+        await new Promise((resolve) => setTimeout(resolve, 800));
       }
-      alert("Cadastro realizado com sucesso! Você será redirecionado.");
-      // Redirecionar para /obras ao invés de /home para ser consistente com o login
       navigate("/obras", { replace: true });
     } catch (err) {
-      // Verificar se realmente há um erro válido
       if (!err) {
+        setErroTela("Erro desconhecido. Tente novamente.");
+        setIsSubmitting(false);
         return;
       }
-      
-      console.error("Erro no cadastro:", err);
-      
-      // Mensagens de erro mais amigáveis - só mostrar mensagem específica se o código for exatamente o esperado
-      let errorMessage = "Erro ao cadastrar. Por favor, tente novamente.";
-      
-      // Verificar se o erro realmente é do tipo esperado e tem o código correto
+
+      console.error("[Cadastro] Erro capturado:", err);
+      console.error("[Cadastro] err.code:", err.code, "err.message:", err.message);
+
+      let errorMessage = err.message || "Erro ao cadastrar. Tente novamente.";
       if (err.code === "auth/email-already-in-use") {
-        errorMessage = "Este email já está cadastrado no sistema.\n\n" +
-          "Se você já possui uma conta, por favor faça login.\n" +
-          "Se você esqueceu sua senha, use a opção de recuperação de senha.\n\n" +
-          "Se você não criou esta conta, entre em contato com o suporte.";
-      } else if (err.code === "firestore/error") {
-        errorMessage = "Conta criada, mas houve um erro ao salvar seus dados.\n\n" +
-          "Por favor, tente fazer login. Se o problema persistir, entre em contato com o suporte.";
-      } else if (err.message) {
-        // Usar a mensagem do erro apenas se não for um dos casos específicos acima
+        errorMessage = "Este email já está cadastrado. Faça login ou use recuperação de senha.";
+      } else if (err.code === "auth/invalid-input") {
         errorMessage = err.message;
+      } else if (err.code === "firestore/error") {
+        errorMessage = "Erro ao salvar dados. Tente fazer login.";
+      } else if (err.message === "Failed to fetch" || err.name === "TypeError") {
+        errorMessage = "Não foi possível conectar ao servidor. Verifique se o backend está rodando e se REACT_APP_API_URL está correto.";
       }
-      
-      alert(errorMessage);
+
+      setErroTela(errorMessage);
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -118,6 +124,23 @@ export default function CadastroUsuario() {
         >
           Cadastro de Usuário
         </h2>
+
+        {erroTela && (
+          <div
+            role="alert"
+            style={{
+              marginBottom: "1rem",
+              padding: "12px 16px",
+              background: "#fef2f2",
+              border: "1px solid #fecaca",
+              borderRadius: "8px",
+              color: "#b91c1c",
+              fontSize: "0.95rem",
+            }}
+          >
+            {erroTela}
+          </div>
+        )}
 
         <form className="form-cadastro" onSubmit={handleSubmit}>
           {/* Nome / Sobrenome */}
@@ -230,8 +253,13 @@ export default function CadastroUsuario() {
 
           {/* Botão verde centralizado */}
           <div style={{ textAlign: "center" }}>
-            <button type="submit" className="botao">
-              Criar conta e entrar
+            <button
+              type="submit"
+              className="botao"
+              disabled={isSubmitting}
+              aria-busy={isSubmitting}
+            >
+              {isSubmitting ? "Criando conta..." : "Criar conta e entrar"}
             </button>
           </div>
         </form>

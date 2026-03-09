@@ -160,9 +160,11 @@ export function AuthProvider({ children }) {
         setUser(normalizeUserFromApi(data.user));
         return { uid: data.user.id, email: data.user.email, displayName: data.user.displayName || "", funcao: data.user.funcao };
       } catch (err) {
-        if (err.code === "auth/email-already-in-use")
-          throw makeError("auth/email-already-in-use", err.message || "Este email já está cadastrado. Faça login.");
-        throw makeError(err.code || "auth/error", err.message || "Erro ao criar conta.");
+        const code = err.code || "auth/error";
+        const message = err.message || "Erro ao criar conta.";
+        if (code === "auth/email-already-in-use")
+          throw makeError("auth/email-already-in-use", message);
+        throw makeError(code, message);
       }
     }
 

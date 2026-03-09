@@ -42,6 +42,9 @@ export async function request(method, path, body = null, options = {}) {
   }
 
   if (!res.ok) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('[API] Resposta não OK:', res.status, path, data);
+    }
     if (res.status === 401) {
       setToken(null);
       if (typeof window !== 'undefined') {
