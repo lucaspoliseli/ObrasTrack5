@@ -100,7 +100,9 @@ router.get('/usuario', requireAuth, async (req, res) => {
 // GET /api/obras/:id
 router.get('/:id', requireAuth, async (req, res) => {
   try {
+    console.log('[GET /api/obras/:id] id:', req.params.id);
     const result = await pool.query('SELECT * FROM obras WHERE id = $1', [req.params.id]);
+    console.log('[GET /api/obras/:id] rows:', result.rows.length);
     if (result.rows.length === 0) return res.status(404).json({ error: 'Obra não encontrada.' });
     return res.json(rowToObra(result.rows[0]));
   } catch (err) {

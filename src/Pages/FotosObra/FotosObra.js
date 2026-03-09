@@ -26,7 +26,9 @@ export default function FotosObra() {
     async function loadObra() {
       if (id) {
         try {
+          console.log('[FotosObra] useParams id:', id);
           const obraEncontrada = await obraService.getObraById(id);
+          console.log('[FotosObra] obraEncontrada.id:', obraEncontrada?.id);
           setObra(obraEncontrada || null);
         } catch (err) {
           console.error('Erro ao carregar obra:', err);
@@ -51,7 +53,9 @@ export default function FotosObra() {
       try {
         setLoading(true);
         setError(null);
+        console.log('[FotosObra] carregando fotos para obraId:', id);
         const fotos = await fotoService.getFotosByObra(id);
+        console.log('[FotosObra] fotos retornadas:', Array.isArray(fotos) ? fotos.length : 'não-array');
         setItens(fotos);
       } catch (err) {
         console.error('Erro ao carregar fotos:', err);

@@ -25,12 +25,13 @@ export default function ChatObra() {
       }
 
       try {
-        // Try to load from Firebase first
+        console.log('[ChatObra] useParams id:', id, 'user.uid:', user?.uid);
         let obra = null;
         try {
           obra = await obraService.getObraById(id);
+          console.log('[ChatObra] obraCarregada.id:', obra?.id);
         } catch (e) {
-          console.warn('Erro ao carregar obra do Firebase:', e);
+          console.warn('Erro ao carregar obra via obraService:', e);
         }
 
         if (!obra) {
@@ -45,6 +46,8 @@ export default function ChatObra() {
         const isEngenheiro = String(user?.uid) === String(obra?.engenheiroId);
         const isProprietario = String(user?.uid) === String(obra?.proprietarioId) ||
           ((obra?.proprietarioEmail || '').toLowerCase() === (user?.email || '').toLowerCase());
+
+        console.log('[ChatObra] permissões:', { isEngenheiro, isProprietario });
 
         if (!isEngenheiro && !isProprietario) {
           alert('Você não tem permissão para acessar o chat desta obra.');

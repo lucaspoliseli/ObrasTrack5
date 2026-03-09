@@ -36,6 +36,13 @@ function MenuHamburguer() {
   const match = location.pathname.match(/detalhesObra\/([^/]+)|obras\/([^/]+)/);
   const obraId = match ? (match[1] || match[2]) : null;
 
+  if (obraId) {
+    console.log('[MenuHamburguer] pathname:', location.pathname, 'obraId:', obraId, {
+      fotosHref: `/obras/${obraId}/fotos`,
+      chatHref: `/obras/${obraId}/chat`,
+    });
+  }
+
   return (
     <div className="menu-hamburguer-container">
       <button className="menu-botao" onClick={toggleMenu}>

@@ -118,11 +118,17 @@ class ObraService {
   }
 
   async getObraById(id) {
+    console.log('[obraService.getObraById] USE_API:', USE_API, 'id:', id);
     if (USE_API) {
       if (!id) return null;
+      const url = `/api/obras/${id}`;
+      console.log('[obraService.getObraById] calling', url);
       try {
-        return await api.get(`/api/obras/${id}`);
-      } catch {
+        const data = await api.get(url);
+        console.log('[obraService.getObraById] API ok, obra.id:', data?.id);
+        return data;
+      } catch (e) {
+        console.error('[obraService.getObraById] API error for id:', id, e);
         return null;
       }
     }
