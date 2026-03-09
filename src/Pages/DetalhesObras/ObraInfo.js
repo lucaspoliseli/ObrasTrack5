@@ -2,7 +2,12 @@ import React from "react";
 import "./DetalhesObras.css";
 
 const isDate = (s) => typeof s === "string" && /^\d{4}-\d{2}-\d{2}$/.test(s);
-const toBR = (s) => (isDate(s) ? new Date(s).toLocaleDateString("pt-BR") : s || "—");
+const toBR = (s) => {
+  if (!s) return "—";
+  const d = new Date(s);
+  if (Number.isNaN(d.getTime())) return s;
+  return d.toLocaleDateString("pt-BR");
+};
 const num = (v) => (typeof v === "number" && Number.isFinite(v) ? v : null);
 
 export default function ObraInfo({ obra }) {
