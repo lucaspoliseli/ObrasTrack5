@@ -10,15 +10,17 @@ body {
   padding: 0;
 }
 
-/* Evita borda vermelha em campos required antes da interação (:invalid nativo do HTML5) */
+/* Evita borda/outline vermelha em campos required antes da interação (:invalid nativo do HTML5) */
 input:invalid,
 input:focus:invalid,
+input:focus-visible:invalid,
 textarea:invalid,
 textarea:focus:invalid,
 select:invalid,
 select:focus:invalid {
   border-color: #ced4da;
   box-shadow: none;
+  outline: none;
 }
 button {
   border: none; 
