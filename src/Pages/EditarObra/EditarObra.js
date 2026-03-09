@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import obraService from "../../services/obraService";
 import { useAuth } from "../../AuthContext/AuthContext";
 import "./EditarObra.css";
+import { toDateOnly, diffDias } from "../../utils/dateUtils";
 
 /* ============ Utils de leitura/normalização ============ */
 function pick(obj, paths) {
@@ -42,28 +43,6 @@ function toEnderecoString(val) {
       .join(" ");
   }
   return String(val);
-}
-
-function toDateOnly(iso) {
-  if (!iso) return "";
-  // já está yyyy-mm-dd? devolve como está
-  if (/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
-  // tenta normalizar
-  const d = new Date(iso);
-  if (isNaN(d)) return "";
-  const yyyy = d.getFullYear();
-  const mm = String(d.getMonth() + 1).padStart(2, "0");
-  const dd = String(d.getDate()).padStart(2, "0");
-  return `${yyyy}-${mm}-${dd}`;
-}
-
-function diffDias(ini, fim) {
-  if (!ini || !fim) return "";
-  const a = new Date(ini);
-  const b = new Date(fim);
-  if (isNaN(a) || isNaN(b) || b < a) return "";
-  const MS = 1000 * 60 * 60 * 24;
-  return String(Math.ceil((b - a) / MS));
 }
 
 /* ======================================================= */

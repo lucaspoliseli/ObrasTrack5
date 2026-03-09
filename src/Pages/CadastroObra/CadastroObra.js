@@ -7,6 +7,7 @@ import './CadastroObra.css';
 import { addObra } from '../../services/obraService'; // named export
 import { useAuth } from '../../AuthContext/AuthContext';
 import userService from '../../services/userService';
+import { validateIsoDateRange } from '../../utils/dateUtils';
 
 function CadastroObra() {
   const [proprietarioNome, setProprietarioNome] = useState('');
@@ -35,24 +36,6 @@ function CadastroObra() {
     navigate('/obras');
   };
 
-  // Função auxiliar para validar se data final é maior ou igual à data de início
-  const validarDatas = (dataInicioStr, dataFinalStr) => {
-    if (!dataInicioStr || !dataFinalStr) {
-      return { valido: false, mensagem: 'Preencha ambas as datas.' };
-    }
-    
-    // Comparar strings diretamente (formato YYYY-MM-DD)
-    // Isso evita problemas de timezone
-    if (dataFinalStr < dataInicioStr) {
-      return { 
-        valido: false, 
-        mensagem: 'A data final não pode ser anterior à data de início.' 
-      };
-    }
-    
-    return { valido: true, mensagem: '' };
-  };
-
   async function fetchWithTimeout(url, ms = 6000, options = {}) {
     const ctrl = new AbortController();
     const id = setTimeout(() => ctrl.abort(), ms);
@@ -79,7 +62,7 @@ function CadastroObra() {
     }
 
     // Validar se a data de início é anterior ou igual à data final
-    const validacao = validarDatas(dataInicio, dataFinal);
+    const validacao = validateIsoDateRange(dataInicio, dataFinal);
     if (!validacao.valido) {
       setErroData(validacao.mensagem);
       alert(validacao.mensagem + ' Por favor, corrija as datas antes de continuar.');
@@ -199,7 +182,7 @@ function CadastroObra() {
   useEffect(() => {
     if (dataInicio && dataFinal) {
       // Validar usando comparação de strings (mais confiável)
-      const validacao = validarDatas(dataInicio, dataFinal);
+      const validacao = validateIsoDateRange(dataInicio, dataFinal);
       
       if (!validacao.valido) {
         setErroData(validacao.mensagem);

@@ -11,6 +11,7 @@ import { useAuth } from '../../AuthContext/AuthContext';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import { faSquareCaretDown, faSquareCaretUp } from '@fortawesome/free-regular-svg-icons';
+import { diffDias as diffDiasBase } from '../../utils/dateUtils';
 
 /* =========================
    Helpers de status e datas
@@ -60,16 +61,12 @@ function normalizeToISO(str) {
 
 // calcula a diferença em dias entre ini e fim (ISO), mínimo 1
 function diffDias(iniISO, fimISO) {
-  const a = toDate(iniISO);
-  const b = toDate(fimISO);
-  if (!a || !b) return '';
-  if (b < a) return '';
-
-  const MS = 1000 * 60 * 60 * 24;
-  const dias = Math.ceil((b - a) / MS);
-
+  const valor = diffDiasBase(iniISO, fimISO);
+  if (valor === '') return '';
+  const n = Number(valor);
+  if (Number.isNaN(n)) return '';
   // se início == fim, queremos contar como 1 dia, não 0
-  return String(dias === 0 ? 1 : dias);
+  return String(n === 0 ? 1 : n);
 }
 
 function isOverdue(e) {
