@@ -9,6 +9,17 @@ body {
   margin: 0;
   padding: 0;
 }
+
+/* Evita borda vermelha em campos required antes da interação (:invalid nativo do HTML5) */
+input:invalid,
+input:focus:invalid,
+textarea:invalid,
+textarea:focus:invalid,
+select:invalid,
+select:focus:invalid {
+  border-color: #ced4da;
+  box-shadow: none;
+}
 button {
   border: none; 
   background: none; 
