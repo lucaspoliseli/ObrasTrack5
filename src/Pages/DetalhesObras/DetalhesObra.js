@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../AuthContext/AuthContext";
 import obraService from "../../services/obraService";
+import { toDateOnly } from "../../utils/dateUtils";
 import "./DetalhesObras.css";
 import ObraInfo from "./ObraInfo";
 import ObraGrafico from "./ObraGrafico";
@@ -64,10 +65,8 @@ export default function DetalhesObra() {
   let obra = null;
   if (obraOriginal) {
     const hojeISO = new Date().toISOString().slice(0, 10);
-    const dataInicioISO =
-      obraOriginal.dataInicio && isDateString(obraOriginal.dataInicio)
-        ? obraOriginal.dataInicio
-        : hojeISO;
+    const rawDataInicio = obraOriginal.dataInicio || hojeISO;
+    const dataInicioISO = toDateOnly(rawDataInicio) || hojeISO;
 
     let prazoDias = Number(obraOriginal.prazo);
     if (Number.isNaN(prazoDias) && isDateString(obraOriginal.prazo)) {
@@ -82,12 +81,13 @@ export default function DetalhesObra() {
       prazoDias = 0;
     }
 
-    const dataFinalISO =
-      obraOriginal.dataFinal && isDateString(obraOriginal.dataFinal)
-        ? obraOriginal.dataFinal
-        : isDateString(obraOriginal.prazo)
-        ? obraOriginal.prazo
-        : null;
+    let rawDataFinal = null;
+    if (obraOriginal.dataFinal) {
+      rawDataFinal = obraOriginal.dataFinal;
+    } else if (isDateString(obraOriginal.prazo)) {
+      rawDataFinal = obraOriginal.prazo;
+    }
+    const dataFinalISO = rawDataFinal ? toDateOnly(rawDataFinal) : null;
 
     // ====== CORREÇÃO DO ENDEREÇO ======
     // Trata tanto string quanto objeto
@@ -128,7 +128,7 @@ export default function DetalhesObra() {
       ...obraOriginal,
       dataInicio: dataInicioISO,
       prazo: prazoDias,
-      dataFinal: dataFinalISO || obraOriginal.dataFinal || null,
+      dataFinal: dataFinalISO || null,
       endereco: enderecoTexto || "—",
       enderecoUrl,
     };
