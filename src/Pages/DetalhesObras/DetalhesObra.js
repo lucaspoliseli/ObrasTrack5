@@ -191,9 +191,10 @@ export default function DetalhesObra() {
     obra?.responsavel
   );
 
-  const obraDisplay = obra
-    ? { ...obra, proprietarioNome, responsavelNome }
-    : null;
+  const obraDisplay = useMemo(() =>
+    obra ? { ...obra, proprietarioNome, responsavelNome } : null,
+    [obra, proprietarioNome, responsavelNome]
+  );
 
   // Permissão para chat
   const podeChat = !!user && obraDisplay && (

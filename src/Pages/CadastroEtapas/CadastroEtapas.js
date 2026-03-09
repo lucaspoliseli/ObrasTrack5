@@ -94,18 +94,8 @@ function deriveStatus(e) {
   return e.status || 'Pendente';
 }
 
-export default function CadastroEtapas() {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const { user } = useAuth();
-  const obraId = Number(id);
-
-  const [obra, setObra] = useState(null);
-  const [etapas, setEtapas] = useState([]);
-  const [etapasExpandidas, setEtapasExpandidas] = useState([]);
-
-  // modelo inicial agora já vem com subetapas vazio
-  const initialEtapas = [
+// modelo inicial agora já vem com subetapas vazio (fora do componente para evitar re-criação)
+const INITIAL_ETAPAS = [
     { nome: 'Pintura',       descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
     { nome: 'Alvenaria',     descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
     { nome: 'Elétrica',      descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
@@ -115,7 +105,17 @@ export default function CadastroEtapas() {
     { nome: 'Revestimentos', descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
     { nome: 'Gesso',         descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
     { nome: 'Piso',          descricao: '', prazo: '', dataInicio: '', dataFim: '', status: 'Pendente', subetapas: [] },
-  ];
+];
+
+export default function CadastroEtapas() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const { user } = useAuth();
+  const obraId = Number(id);
+
+  const [obra, setObra] = useState(null);
+  const [etapas, setEtapas] = useState([]);
+  const [etapasExpandidas, setEtapasExpandidas] = useState([]);
 
   // carregar obra e rascunho/dados prévios
   useEffect(() => {
@@ -159,7 +159,7 @@ export default function CadastroEtapas() {
           setEtapas(normalizadas);
         } else {
           // se não tem nada salvo ainda, usa as iniciais
-          setEtapas(initialEtapas);
+          setEtapas(INITIAL_ETAPAS);
         }
       } catch (error) {
         console.error('Erro ao carregar obra:', error);
