@@ -32,7 +32,8 @@ function MenuHamburguer() {
 
   // Tenta extrair id da obra do pathname para habilitar link de fotos contextual
   // cobre padrões: /detalhesObra/:id, /obras/:id/(editar|etapas|fotos)
-  const match = location.pathname.match(/detalhesObra\/(\w+)|obras\/(\w+)/);
+  // usa [^/]+ para capturar UUIDs completos (com hífens) até a próxima barra
+  const match = location.pathname.match(/detalhesObra\/([^/]+)|obras\/([^/]+)/);
   const obraId = match ? (match[1] || match[2]) : null;
 
   return (
