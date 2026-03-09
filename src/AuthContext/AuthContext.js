@@ -148,20 +148,24 @@ export function AuthProvider({ children }) {
 
     if (USE_API) {
       try {
-        const data = await api.post("/api/auth/register", {
+        const payload = {
           nome: (nome || "").trim(),
           sobrenome: (sobrenome || "").trim(),
           email,
           telefone: (telefone || "").trim(),
           senha,
           funcao: (funcao || "engenheiro").toString().trim().toLowerCase()
-        });
+        };
+        const data = await api.post("/api/auth/register", payload);
         setToken(data.token);
         setUser(normalizeUserFromApi(data.user));
         return { uid: data.user.id, email: data.user.email, displayName: data.user.displayName || "", funcao: data.user.funcao };
       } catch (err) {
-        const code = err.code || "auth/error";
-        const message = err.message || "Erro ao criar conta.";
+        console.error("[signUp] erro completo:", err);
+        console.error("[signUp] err.message:", err?.message, "err.code:", err?.code, "err.status:", err?.status);
+        console.error("[signUp] err.responseBody:", err?.responseBody);
+        const code = err?.code || "auth/error";
+        const message = err?.message || err?.responseBody || String(err) || "Erro ao criar conta.";
         if (code === "auth/email-already-in-use")
           throw makeError("auth/email-already-in-use", message);
         throw makeError(code, message);

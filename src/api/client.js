@@ -32,28 +32,38 @@ export async function request(method, path, body = null, options = {}) {
     delete headers['Content-Type'];
   }
 
-  const res = await fetch(url, config);
-  const text = await res.text();
+  let res;
+  let text = '';
+  try {
+    res = await fetch(url, config);
+    text = await res.text();
+  } catch (fetchErr) {
+    console.error('[API] Fetch falhou (rede/CORS/URL):', fetchErr);
+    console.error('[API] URL:', url, 'método:', method);
+    throw fetchErr;
+  }
+
   let data = null;
   try {
     data = text ? JSON.parse(text) : null;
   } catch (_) {
-    data = { error: text || 'Erro desconhecido' };
+    data = { error: text || 'Resposta não é JSON' };
   }
 
   if (!res.ok) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('[API] Resposta não OK:', res.status, path, data);
-    }
+    const errorMessage = data?.error || data?.errorDetail || data?.message || (text && text.length < 300 ? text : null) || `HTTP ${res.status}`;
+    console.error('[API] Resposta não OK:', { method, url, status: res.status, body: text });
     if (res.status === 401) {
       setToken(null);
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new Event('auth-logout'));
       }
     }
-    const err = new Error(data?.error || data?.message || `HTTP ${res.status}`);
+    const err = new Error(errorMessage);
     err.code = data?.code;
     err.status = res.status;
+    err.responseBody = text;
+    err.responseStatus = res.status;
     throw err;
   }
   return data;

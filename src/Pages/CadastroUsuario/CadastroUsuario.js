@@ -84,9 +84,10 @@ export default function CadastroUsuario() {
       }
 
       console.error("[Cadastro] Erro capturado:", err);
-      console.error("[Cadastro] err.code:", err.code, "err.message:", err.message);
+      console.error("[Cadastro] err.message:", err.message, "err.code:", err.code);
+      console.error("[Cadastro] err.responseStatus:", err.responseStatus, "err.responseBody:", err.responseBody);
 
-      let errorMessage = err.message || "Erro ao cadastrar. Tente novamente.";
+      let errorMessage = err.message || err.responseBody || "Erro ao cadastrar. Tente novamente.";
       if (err.code === "auth/email-already-in-use") {
         errorMessage = "Este email já está cadastrado. Faça login ou use recuperação de senha.";
       } else if (err.code === "auth/invalid-input") {
@@ -96,7 +97,6 @@ export default function CadastroUsuario() {
       } else if (err.message === "Failed to fetch" || err.name === "TypeError") {
         errorMessage = "Não foi possível conectar ao servidor. Verifique se o backend está rodando e se REACT_APP_API_URL está correto.";
       }
-
       setErroTela(errorMessage);
     } finally {
       setIsSubmitting(false);
