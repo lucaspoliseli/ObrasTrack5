@@ -7,6 +7,7 @@ class NotificationService {
       return { byObra: {}, total: 0 };
     }
     try {
+      console.log('[notificationService] Buscando notificações não lidas...');
       const data = await api.get('/api/notifications/unread');
       const byObra = data?.byObra || {};
       const total = data?.total || 0;
@@ -24,6 +25,7 @@ class NotificationService {
         };
       });
 
+      console.log('[notificationService] Resumo recebido', { total, obras: Object.keys(normalized).length });
       return { byObra: normalized, total };
     } catch (error) {
       console.error('Erro ao buscar notificações não lidas:', error);
@@ -39,7 +41,9 @@ class NotificationService {
       if (tipo === 'mensagem' || tipo === 'imagem') {
         body.tipo = tipo;
       }
+      console.log('[notificationService] Marcando notificações como lidas', body);
       const res = await api.post('/api/notifications/mark-read', body);
+      console.log('[notificationService] Resultado mark-read', res);
       return res?.updated || 0;
     } catch (error) {
       console.error('Erro ao marcar notificações como lidas:', error);

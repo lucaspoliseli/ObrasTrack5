@@ -65,6 +65,13 @@ router.post('/:obraId/fotos', requireAuth, upload.single('file'), async (req, re
     }
     const descricao = (req.body.descricao || '').trim();
     const autorNome = req.user.displayName || req.user.nome || 'Engenheiro';
+    console.log('[fotos] Upload de imagem recebido', {
+      obraId,
+      autorId: req.user.id,
+      autorNome,
+      fileName: req.file.originalname,
+      size: req.file.size
+    });
     const relativePath = path.join(obraId, req.file.filename).replace(/\\/g, '/');
     const baseUrl = (req.protocol + '://' + req.get('host')) + '/api/uploads/';
     const url = baseUrl + relativePath;
@@ -87,18 +94,51 @@ router.post('/:obraId/fotos', requireAuth, upload.single('file'), async (req, re
       if (obraResult.rows.length > 0) {
         const obra = obraResult.rows[0];
         const autorId = req.user.id;
+        let destinatarioId = null;
+
         // Apenas engenheiro deve gerar notificação para o proprietário
         if (
           obra.engenheiro_id &&
-          String(obra.engenheiro_id) === String(autorId) &&
-          obra.proprietario_id &&
-          String(obra.proprietario_id) !== String(autorId)
+          String(obra.engenheiro_id) === String(autorId)
         ) {
+          destinatarioId = obra.proprietario_id || null;
+          // Fallback por email caso proprietario_id ainda esteja nulo
+          if (!destinatarioId && (obra.proprietario_email || obra.owner_email)) {
+            const email = (obra.proprietario_email || obra.owner_email || '').toLowerCase();
+            const userRes = await pool.query(
+              'SELECT id FROM users WHERE LOWER(email) = $1',
+              [email]
+            );
+            if (userRes.rows.length > 0) {
+              destinatarioId = userRes.rows[0].id;
+            }
+          }
+        }
+
+        if (
+          destinatarioId &&
+          String(destinatarioId) !== String(autorId)
+        ) {
+          console.log('[fotos] Criando notificação de imagem', {
+            obraId,
+            tipo: 'imagem',
+            remetenteId: autorId,
+            destinatarioId
+          });
           await pool.query(
             `INSERT INTO notifications (obra_id, user_id, tipo)
              VALUES ($1, $2, 'imagem')`,
-            [obraId, obra.proprietario_id]
+            [obraId, destinatarioId]
           );
+        } else {
+          console.log('[fotos] Não foi possível determinar destinatário da notificação de imagem', {
+            obraId,
+            autorId,
+            engenheiroId: obra.engenheiro_id,
+            proprietarioId: obra.proprietario_id,
+            proprietarioEmail: obra.proprietario_email,
+            ownerEmail: obra.owner_email
+          });
         }
       }
     } catch (notifyErr) {

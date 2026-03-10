@@ -6,6 +6,8 @@ import { toDateOnly } from "../../utils/dateUtils";
 import "./DetalhesObras.css";
 import ObraInfo from "./ObraInfo";
 import ObraGrafico from "./ObraGrafico";
+import notificationService from "../../services/notificationService";
+import { USE_API } from "../../config";
 
 export default function DetalhesObra() {
   const { id } = useParams();
@@ -25,6 +27,7 @@ export default function DetalhesObra() {
 
   const [obraFirebase, setObraFirebase] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [obraNotifications, setObraNotifications] = useState({ mensagens: 0, imagens: 0 });
 
   useEffect(() => {
     async function loadObra() {
@@ -46,6 +49,29 @@ export default function DetalhesObra() {
     }
 
     loadObra();
+  }, [id]);
+
+  // Carregar notificações específicas da obra (para badges de chat/fotos)
+  useEffect(() => {
+    async function loadNotifications() {
+      if (!USE_API || !id) {
+        setObraNotifications({ mensagens: 0, imagens: 0 });
+        return;
+      }
+      try {
+        const summary = await notificationService.getUnreadSummary();
+        const entry = summary.byObra?.[id] || { mensagens: 0, imagens: 0 };
+        setObraNotifications({
+          mensagens: entry.mensagens || 0,
+          imagens: entry.imagens || 0
+        });
+      } catch (e) {
+        console.warn('[DetalhesObra] Erro ao carregar notificações da obra:', e);
+        setObraNotifications({ mensagens: 0, imagens: 0 });
+      }
+    }
+
+    loadNotifications();
   }, [id]);
 
   // Usar apenas obra do Firebase (sem fallback para localStorage)
@@ -457,18 +483,46 @@ export default function DetalhesObra() {
           <>
             <button className="btn" onClick={() => navigate(`/obras/${id}/editar`)}>Editar obra</button>
             <button className="btn" onClick={() => navigate(`/obras/${id}/etapas`)}>Adicionar / editar etapas</button>
-            <button className="btn" onClick={() => navigate(`/obras/${id}/fotos`)}>Fotos da obra</button>
+            <button className="btn" onClick={() => navigate(`/obras/${id}/fotos`)}>
+              Fotos da obra
+              {obraNotifications.imagens > 0 && (
+                <span className="btn-notification-badge">
+                  {obraNotifications.imagens > 9 ? '9+' : obraNotifications.imagens}
+                </span>
+              )}
+            </button>
             {podeChat && (
-              <button className="btn" onClick={() => navigate(`/obras/${id}/chat`)}>💬 Ir para Chat</button>
+              <button className="btn" onClick={() => navigate(`/obras/${id}/chat`)}>
+                💬 Ir para Chat
+                {obraNotifications.mensagens > 0 && (
+                  <span className="btn-notification-badge">
+                    {obraNotifications.mensagens > 9 ? '9+' : obraNotifications.mensagens}
+                  </span>
+                )}
+              </button>
             )}
             <button className="btn" style={{ background: '#cc2936' }} onClick={excluirObra}>Excluir obra</button>
           </>
         )}
         {!isEngenheiro && (
           <>
-            <button className="btn" onClick={() => navigate(`/obras/${id}/fotos`)}>Ver fotos da obra</button>
+            <button className="btn" onClick={() => navigate(`/obras/${id}/fotos`)}>
+              Ver fotos da obra
+              {obraNotifications.imagens > 0 && (
+                <span className="btn-notification-badge">
+                  {obraNotifications.imagens > 9 ? '9+' : obraNotifications.imagens}
+                </span>
+              )}
+            </button>
             {podeChat && (
-              <button className="btn" onClick={() => navigate(`/obras/${id}/chat`)}>💬 Ir para Chat</button>
+              <button className="btn" onClick={() => navigate(`/obras/${id}/chat`)}>
+                💬 Ir para Chat
+                {obraNotifications.mensagens > 0 && (
+                  <span className="btn-notification-badge">
+                    {obraNotifications.mensagens > 9 ? '9+' : obraNotifications.mensagens}
+                  </span>
+                )}
+              </button>
             )}
           </>
         )}
