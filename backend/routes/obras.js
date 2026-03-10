@@ -1,6 +1,7 @@
 const express = require('express');
 const { pool } = require('../config/database');
 const { requireAuth, requireEngenheiro } = require('../middleware/auth');
+const obraService = require('../services/obraService');
 
 const router = express.Router();
 
@@ -83,6 +84,11 @@ router.get('/usuario', requireAuth, async (req, res) => {
   try {
     const uid = req.user.id;
     const email = (req.user.email || '').toLowerCase();
+    console.log('[obras/usuario] Usuário logado:', {
+      id: uid,
+      email,
+      funcao: req.user.funcao
+    });
     const result = await pool.query(
       `SELECT * FROM obras
        WHERE proprietario_id = $1 OR created_by_id = $1 OR engenheiro_id = $1
@@ -90,7 +96,26 @@ router.get('/usuario', requireAuth, async (req, res) => {
        ORDER BY criado_em DESC`,
       [uid, email]
     );
-    return res.json(result.rows.map(rowToObra));
+    const obrasRows = result.rows || [];
+
+    // Se for proprietário, garantir vínculo proprietario_id baseado em email (correção de legado)
+    try {
+      const funcao = (req.user.funcao || '').toString().trim().toLowerCase();
+      if (funcao === 'proprietario' && email) {
+        const vinculadas = await obraService.vincularObrasAoProprietario(email, uid);
+        if (vinculadas > 0) {
+          console.log('[obras/usuario] Vinculadas obras ao proprietário durante listagem:', {
+            userId: uid,
+            email,
+            vinculadas
+          });
+        }
+      }
+    } catch (vincErr) {
+      console.warn('[obras/usuario] Erro ao vincular obras ao proprietário (não crítico):', vincErr);
+    }
+
+    return res.json(obrasRows.map(rowToObra));
   } catch (err) {
     console.error('Erro ao listar obras do usuário:', err);
     return res.status(500).json({ error: 'Erro ao listar obras.' });
