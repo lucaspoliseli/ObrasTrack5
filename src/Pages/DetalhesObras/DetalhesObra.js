@@ -7,7 +7,7 @@ import "./DetalhesObras.css";
 import ObraInfo from "./ObraInfo";
 import ObraGrafico from "./ObraGrafico";
 import notificationService from "../../services/notificationService";
-import { USE_API } from "../../config";
+import { USE_API, API_URL } from "../../config";
 
 export default function DetalhesObra() {
   const { id } = useParams();
@@ -30,6 +30,9 @@ export default function DetalhesObra() {
   const [obraNotifications, setObraNotifications] = useState({ mensagens: 0, imagens: 0 });
 
   useEffect(() => {
+    // Debug temporário: garantir modo API e baseURL nesta tela
+    console.log('[DetalhesObra] Config API', { USE_API, API_URL, obraId: id });
+
     async function loadObra() {
       if (!id) {
         setLoading(false);

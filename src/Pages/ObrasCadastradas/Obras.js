@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Obras.css';
 import { useAuth } from '../../AuthContext/AuthContext';
-import { USE_API } from '../../config';
+import { USE_API, API_URL } from '../../config';
 import obraService from '../../services/obraService';
 import notificationService from '../../services/notificationService';
 
@@ -33,6 +33,9 @@ export default function Obras() {
   const [notifByObra, setNotifByObra] = useState({});
 
   useEffect(() => {
+    // Debug temporário: garantir modo API e baseURL
+    console.log('[Obras] Config API', { USE_API, API_URL });
+
     async function loadObras() {
       try {
         setLoading(true);
