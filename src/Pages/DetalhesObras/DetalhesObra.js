@@ -28,6 +28,10 @@ export default function DetalhesObra() {
   const [obraFirebase, setObraFirebase] = useState(null);
   const [loading, setLoading] = useState(true);
   const [obraNotifications, setObraNotifications] = useState({ mensagens: 0, imagens: 0 });
+  const [debugNotif, setDebugNotif] = useState({
+    summary: null,
+    lastError: null
+  });
 
   useEffect(() => {
     // Debug temporário: garantir modo API e baseURL nesta tela
@@ -68,9 +72,17 @@ export default function DetalhesObra() {
           mensagens: entry.mensagens || 0,
           imagens: entry.imagens || 0
         });
+        setDebugNotif({
+          summary,
+          lastError: null
+        });
       } catch (e) {
         console.warn('[DetalhesObra] Erro ao carregar notificações da obra:', e);
         setObraNotifications({ mensagens: 0, imagens: 0 });
+        setDebugNotif({
+          summary: null,
+          lastError: e?.message || String(e)
+        });
       }
     }
 
@@ -322,6 +334,29 @@ export default function DetalhesObra() {
 
   return (
     <div className="container">
+      {/* Painel de debug temporário para notificações desta obra */}
+      <div style={{
+        background: '#e6f7ff',
+        border: '1px solid #1890ff',
+        padding: '8px 12px',
+        margin: '8px 0',
+        borderRadius: 8,
+        fontSize: '0.8rem',
+        color: '#003a8c'
+      }}>
+        <strong>DEBUG Notificações Obra</strong>
+        <div>USE_API: {String(USE_API)}</div>
+        <div>API_URL: {API_URL}</div>
+        <div>obraId: {id}</div>
+        <div>obraNotifications: {JSON.stringify(obraNotifications)}</div>
+        <div>Resposta bruta summary: {debugNotif.summary ? JSON.stringify(debugNotif.summary) : 'null'}</div>
+        {debugNotif.lastError && (
+          <div style={{ marginTop: 4, color: '#b30000' }}>
+            Último erro: {debugNotif.lastError}
+          </div>
+        )}
+      </div>
+
       <ObraInfo obra={obraDisplay} />
       
       <div className="detalhes-obra-content">
