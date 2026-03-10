@@ -40,12 +40,47 @@ router.post('/:obraId/mensagens', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Texto da mensagem é obrigatório.' });
     }
     const autorNome = req.user.displayName || req.user.nome || 'Usuário';
+
+    // Salvar mensagem
     const result = await pool.query(
       `INSERT INTO mensagens (obra_id, autor_id, autor_nome, texto) VALUES ($1, $2, $3, $4)
        RETURNING id, obra_id AS "obraId", autor_id AS "autorId", autor_nome AS "autorNome", texto, criado_em AS "criadoEm"`,
       [obraId, req.user.id, autorNome, texto.trim()]
     );
     const r = result.rows[0];
+
+    // Criar notificação para o outro participante da obra (se existir)
+    try {
+      const obraResult = await pool.query(
+        'SELECT id, engenheiro_id, proprietario_id FROM obras WHERE id = $1',
+        [obraId]
+      );
+      if (obraResult.rows.length > 0) {
+        const obra = obraResult.rows[0];
+        const autorId = req.user.id;
+        let destinatarioId = null;
+
+        // Se autor é engenheiro → notificar proprietário
+        if (obra.engenheiro_id && String(obra.engenheiro_id) === String(autorId)) {
+          destinatarioId = obra.proprietario_id || null;
+        }
+        // Se autor é proprietário → notificar engenheiro
+        else if (obra.proprietario_id && String(obra.proprietario_id) === String(autorId)) {
+          destinatarioId = obra.engenheiro_id || null;
+        }
+
+        if (destinatarioId && String(destinatarioId) !== String(autorId)) {
+          await pool.query(
+            `INSERT INTO notifications (obra_id, user_id, tipo)
+             VALUES ($1, $2, 'mensagem')`,
+            [obraId, destinatarioId]
+          );
+        }
+      }
+    } catch (notifyErr) {
+      console.warn('Falha ao registrar notificação de mensagem (não crítico):', notifyErr);
+    }
+
     return res.status(201).json({
       id: r.id,
       obraId: r.obraId,

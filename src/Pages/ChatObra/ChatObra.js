@@ -3,6 +3,8 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
 import obraService from '../../services/obraService';
 import chatService from '../../services/chatService';
+import notificationService from '../../services/notificationService';
+import { USE_API } from '../../config';
 import './ChatObra.css';
 
 export default function ChatObra() {
@@ -91,6 +93,13 @@ export default function ChatObra() {
     return () => {
       if (unsubscribe) unsubscribe();
     };
+  }, [id, temPermissao]);
+
+  // Ao abrir o chat, marcar notificações de mensagem como lidas para esta obra
+  useEffect(() => {
+    if (!USE_API) return;
+    if (!id || !temPermissao) return;
+    notificationService.markAsRead({ obraId: id, tipo: 'mensagem' }).catch(() => {});
   }, [id, temPermissao]);
 
   async function handleEnviarMsg(e) {

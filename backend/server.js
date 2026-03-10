@@ -8,6 +8,7 @@ const usersRoutes = require('./routes/users');
 const obrasRoutes = require('./routes/obras');
 const mensagensRoutes = require('./routes/mensagens');
 const fotosRoutes = require('./routes/fotos');
+const notificacoesRoutes = require('./routes/notificacoes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -29,6 +30,7 @@ app.use('/api/users', usersRoutes);
 app.use('/api/obras', obrasRoutes);      // GET /, /usuario, /:id, POST /, PUT /:id, DELETE /:id
 app.use('/api/obras', mensagensRoutes);  // GET/POST /api/obras/:obraId/mensagens
 app.use('/api/obras', fotosRoutes);      // GET/POST /api/obras/:obraId/fotos, DELETE /api/obras/foto/:fotoId
+app.use('/api/notifications', notificacoesRoutes); // Notificações de mensagens/imagens
 
 app.get('/api/health', (req, res) => {
   res.json({ ok: true, message: 'Planeja Obra API' });

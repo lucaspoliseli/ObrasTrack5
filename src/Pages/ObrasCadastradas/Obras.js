@@ -5,6 +5,7 @@ import './Obras.css';
 import { useAuth } from '../../AuthContext/AuthContext';
 import { USE_API } from '../../config';
 import obraService from '../../services/obraService';
+import notificationService from '../../services/notificationService';
 
 function fmtBR(data) {
   if (!data) return '—';
@@ -29,6 +30,7 @@ export default function Obras() {
   const [busca, setBusca] = useState('');
   const [obras, setObras] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [notifByObra, setNotifByObra] = useState({});
 
   useEffect(() => {
     async function loadObras() {
@@ -60,6 +62,19 @@ export default function Obras() {
           }
         }
         setObras(list);
+
+        // Buscar notificações não lidas (apenas quando usando API)
+        if (USE_API && list.length > 0) {
+          try {
+            const summary = await notificationService.getUnreadSummary();
+            setNotifByObra(summary.byObra || {});
+          } catch (e) {
+            console.warn('Erro ao carregar notificações de obras:', e);
+            setNotifByObra({});
+          }
+        } else {
+          setNotifByObra({});
+        }
       } catch (error) {
         console.error('Erro ao carregar obras:', error);
         setObras([]);
@@ -168,10 +183,19 @@ export default function Obras() {
           {obrasFiltradas.length > 0 ? (
           obrasFiltradas.map((obra) => {
             const statusExtra = getStatusDinamico(obra);
+            const notif = notifByObra[obra.id] || { total: 0 };
+            const totalNotif = notif.total || 0;
             return (
               <li className="item-lista" key={obra.id}>
                 <Link to={`/detalhesObra/${obra.id}`} className="col col-nome">
-                  {obra.nome}
+                  <span className="obra-nome-wrapper">
+                    {obra.nome}
+                    {totalNotif > 0 && (
+                      <span className="notification-badge">
+                        {totalNotif > 9 ? '9+' : totalNotif}
+                      </span>
+                    )}
+                  </span>
                 </Link>
                 <p className="col col-prazo">{calcularPrazoAtualEstimado(obra.dataInicio, obra.prazo)}</p>
                 <p className="col col-final">{fmtBR(obra.dataFinal)}</p>

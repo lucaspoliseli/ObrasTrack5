@@ -69,6 +69,7 @@ router.post('/:obraId/fotos', requireAuth, upload.single('file'), async (req, re
     const baseUrl = (req.protocol + '://' + req.get('host')) + '/api/uploads/';
     const url = baseUrl + relativePath;
 
+    // Salvar metadados da foto
     const result = await pool.query(
       `INSERT INTO fotos (obra_id, autor_id, autor_nome, descricao, file_name, file_path, url, tamanho, tipo)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
@@ -76,6 +77,34 @@ router.post('/:obraId/fotos', requireAuth, upload.single('file'), async (req, re
       [obraId, req.user.id, autorNome, descricao, req.file.filename, relativePath, url, req.file.size, req.file.mimetype || '']
     );
     const r = result.rows[0];
+
+    // Criar notificação de nova imagem para o proprietário da obra
+    try {
+      const obraResult = await pool.query(
+        'SELECT id, engenheiro_id, proprietario_id FROM obras WHERE id = $1',
+        [obraId]
+      );
+      if (obraResult.rows.length > 0) {
+        const obra = obraResult.rows[0];
+        const autorId = req.user.id;
+        // Apenas engenheiro deve gerar notificação para o proprietário
+        if (
+          obra.engenheiro_id &&
+          String(obra.engenheiro_id) === String(autorId) &&
+          obra.proprietario_id &&
+          String(obra.proprietario_id) !== String(autorId)
+        ) {
+          await pool.query(
+            `INSERT INTO notifications (obra_id, user_id, tipo)
+             VALUES ($1, $2, 'imagem')`,
+            [obraId, obra.proprietario_id]
+          );
+        }
+      }
+    } catch (notifyErr) {
+      console.warn('Falha ao registrar notificação de imagem (não crítico):', notifyErr);
+    }
+
     return res.status(201).json({
       id: r.id,
       obraId: r.obraId,

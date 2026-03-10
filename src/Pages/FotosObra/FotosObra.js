@@ -3,6 +3,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useAuth } from '../../AuthContext/AuthContext';
 import obraService from '../../services/obraService';
 import fotoService from '../../services/fotoService';
+import notificationService from '../../services/notificationService';
+import { USE_API } from '../../config';
 import './FotosObra.css';
 
 export default function FotosObra() {
@@ -67,6 +69,13 @@ export default function FotosObra() {
     }
 
     loadFotos();
+  }, [id]);
+
+  // Ao abrir a galeria, marcar notificações de imagem como lidas para esta obra
+  useEffect(() => {
+    if (!USE_API) return;
+    if (!id) return;
+    notificationService.markAsRead({ obraId: id, tipo: 'imagem' }).catch(() => {});
   }, [id]);
 
   // Fechar modal com ESC
