@@ -9,7 +9,6 @@ const router = express.Router();
 router.get('/unread', requireAuth, async (req, res) => {
   try {
     const userId = req.user.id;
-    console.log('[notifications] GET /unread para usuário', userId);
     const result = await pool.query(
       `SELECT obra_id AS "obraId", tipo, COUNT(*)::INT AS count
        FROM notifications
@@ -26,7 +25,6 @@ router.get('/unread', requireAuth, async (req, res) => {
       total += row.count;
     }
 
-    console.log('[notifications] Resumo de não lidas', { userId, total, obras: Object.keys(byObra).length });
     return res.json({ byObra, total });
   } catch (err) {
     console.error('Erro ao buscar notificações não lidas:', err);
@@ -54,20 +52,7 @@ router.post('/mark-read', requireAuth, async (req, res) => {
       sql += ' AND tipo = $3';
     }
 
-    console.log('[notifications] POST /mark-read', {
-      userId,
-      obraId,
-      tipo: tipo || 'todas',
-      sql
-    });
-
     const result = await pool.query(sql, values);
-    console.log('[notifications] Notificações marcadas como lidas', {
-      userId,
-      obraId,
-      tipo: tipo || 'todas',
-      updated: result.rowCount
-    });
     return res.json({ updated: result.rowCount });
   } catch (err) {
     console.error('Erro ao marcar notificações como lidas:', err);

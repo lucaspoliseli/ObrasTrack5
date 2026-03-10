@@ -1,6 +1,10 @@
 const express = require('express');
 const { pool } = require('../config/database');
 const { requireAuth } = require('../middleware/auth');
+const {
+  resolveObraParticipants,
+  getMessageRecipient
+} = require('../utils/notifications');
 
 const router = express.Router();
 
@@ -40,13 +44,6 @@ router.post('/:obraId/mensagens', requireAuth, async (req, res) => {
       return res.status(400).json({ error: 'Texto da mensagem é obrigatório.' });
     }
     const autorNome = req.user.displayName || req.user.nome || 'Usuário';
-    console.log('[mensagens] Nova mensagem recebida', {
-      obraId,
-      autorId: req.user.id,
-      autorNome,
-      texto: texto.trim()
-    });
-
     // Salvar mensagem
     const result = await pool.query(
       `INSERT INTO mensagens (obra_id, autor_id, autor_nome, texto) VALUES ($1, $2, $3, $4)
@@ -57,56 +54,21 @@ router.post('/:obraId/mensagens', requireAuth, async (req, res) => {
 
     // Criar notificação para o outro participante da obra (se existir)
     try {
-      const obraResult = await pool.query(
-        'SELECT id, engenheiro_id, proprietario_id, proprietario_email, owner_email FROM obras WHERE id = $1',
-        [obraId]
-      );
-      if (obraResult.rows.length > 0) {
-        const obra = obraResult.rows[0];
+      const participantes = await resolveObraParticipants(obraId);
+      if (participantes) {
         const autorId = req.user.id;
-        let destinatarioId = null;
-
-        // Se autor é engenheiro → notificar proprietário
-        if (obra.engenheiro_id && String(obra.engenheiro_id) === String(autorId)) {
-          destinatarioId = obra.proprietario_id || null;
-          // Fallback por email caso proprietario_id ainda esteja nulo
-          if (!destinatarioId && (obra.proprietario_email || obra.owner_email)) {
-            const email = (obra.proprietario_email || obra.owner_email || '').toLowerCase();
-            const userRes = await pool.query(
-              'SELECT id FROM users WHERE LOWER(email) = $1',
-              [email]
-            );
-            if (userRes.rows.length > 0) {
-              destinatarioId = userRes.rows[0].id;
-            }
-          }
-        }
-        // Se autor é proprietário → notificar engenheiro
-        else if (obra.proprietario_id && String(obra.proprietario_id) === String(autorId)) {
-          destinatarioId = obra.engenheiro_id || null;
-        }
+        const destinatarioId = getMessageRecipient({
+          engenheiroId: participantes.engenheiroId,
+          proprietarioId: participantes.proprietarioId,
+          autorId
+        });
 
         if (destinatarioId && String(destinatarioId) !== String(autorId)) {
-          console.log('[mensagens] Criando notificação de mensagem', {
-            obraId,
-            tipo: 'mensagem',
-            remetenteId: autorId,
-            destinatarioId
-          });
           await pool.query(
             `INSERT INTO notifications (obra_id, user_id, tipo)
              VALUES ($1, $2, 'mensagem')`,
             [obraId, destinatarioId]
           );
-        } else {
-          console.log('[mensagens] Não foi possível determinar destinatário da notificação', {
-            obraId,
-            autorId,
-            engenheiroId: obra.engenheiro_id,
-            proprietarioId: obra.proprietario_id,
-            proprietarioEmail: obra.proprietario_email,
-            ownerEmail: obra.owner_email
-          });
         }
       }
     } catch (notifyErr) {
